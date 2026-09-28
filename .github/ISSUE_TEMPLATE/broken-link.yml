@@ -1,0 +1,32 @@
+name: Broken link / wrong info
+about: A link is dead, a number changed, or a license was reported incorrectly
+title: "[type] "
+labels: [correction]
+assignees: []
+
+body:
+  ## What is wrong
+
+<!-- Link dead, number outdated, or license misreported? -->
+
+  ## Where
+
+<!-- e.g. "README.md — Video generation table — Wan2.2 row" -->
+
+  ## Source
+
+<!-- REQUIRED for license or limit claims. Link the provider's own docs or the license file. -->
+
+  ## Type
+
+- Dead link
+- Outdated number (quota, VRAM, size)
+- **License reported incorrectly** (highest priority)
+- Model retired or project archived
+- Spelling / translation issue
+
+  ## If it is a license claim
+
+Please paste the relevant line from the license and link the file.
+
+  This is the failure mode this list exists to prevent, so license corrections jump the queue.
