@@ -6,6 +6,34 @@ Every claim in this list was checked against a primary source. This file records
 
 The rule we follow: a license claim is only stated if we read the license file or the model card. A rate limit is only stated as "published" if the provider publishes it. Everything else is labelled as community-reported.
 
+### Pass 2 — the usability filter
+
+A second pass was run after the first list shipped, applying four hard criteria: **runnable on a consumer GPU**, **commercially usable**, **not region-blocked**, **license confirmed on the weights**. Eight entries failed and were removed:
+
+| Removed | Verified reason | Source read |
+|---|---|---|
+| `CodeFormer` | **S-Lab License 1.0 grants use "for non-commercial purpose"** | [`LICENSE`](https://github.com/sczhou/CodeFormer/blob/master/LICENSE) — *"Redistribution and use for non-commercial purpose in source and binary forms"* |
+| `CogVideoX` | Repo LICENSE says Apache-2.0, but **HF weights say `other`** | [HF API `THUDM/CogVideoX-5b`](https://huggingface.co/api/models/THUDM/CogVideoX-5b) → `license: other`. **Weights beat the repo.** |
+| `FLUX.2-dev` | Non-commercial | [`LICENSE.md`](https://huggingface.co/black-forest-labs/FLUX.2-dev/blob/main/LICENSE.md) |
+| `LTX-2` | Entities must buy | [`LICENSE`](https://huggingface.co/Lightricks/LTX-2/blob/main/LICENSE) |
+| `HunyuanVideo-1.5`, `HunyuanImage-3.0` | Void in EU, UK, South Korea | [`LICENSE`](https://github.com/Tencent-Hunyuan/HunyuanVideo-1.5/blob/main/LICENSE) |
+| `InsightFace` / `inswapper` | Models non-commercial | [insightface.ai](https://www.insightface.ai/) |
+| `F5-TTS` | Weights CC-BY-NC-4.0 | [`cstr/f5-tts-GGUF` README](https://huggingface.co/cstr/f5-tts-GGUF/blob/main/README.md) |
+| `Cerebras` | No permanent free tier; $5 expires in 30 days | [inference-docs.cerebras.ai/support/rate-limits](https://inference-docs.cerebras.ai/support/rate-limits) |
+
+**Replacements added in the same pass**, each verified:
+
+| Replacement | Claim | Source read | Verdict |
+|---|---|---|---|
+| **Chatterbox** (replaces F5-TTS) | **MIT** | [`LICENSE`](https://github.com/resemble-ai/chatterbox/blob/master/LICENSE) | ✅ **Confirmed MIT.** 350M `Chatterbox-Turbo` for low VRAM, 500M `Chatterbox-Multilingual V3` across 23+ languages, ships `example_for_mac.py`. |
+| **FLUX.1-schnell** (replaces FLUX.2-dev) | **Apache-2.0**, ⚠️ gated | [HF API](https://huggingface.co/api/models/black-forest-labs/FLUX.1-schnell) | ✅ `license: apache-2.0`. ⚠️ `gated: auto` — free HF account + accept terms. ⚠️ The **GitHub repo 404s**; link points to the model page. |
+| **Qwen-Image** | **Apache-2.0**, **not gated** | [HF API](https://huggingface.co/api/models/Qwen/Qwen-Image) | ✅ `license: apache-2.0`, `gated: false`. No click-through at all. |
+| **Qwen3-Omni** | **Apache-2.0** | [`LICENSE`](https://github.com/QwenLM/Qwen3-Omni/blob/main/LICENSE) | ✅ **Confirmed.** 119 text languages, 19 speech input, 10 speech output, real-time streaming speech. |
+| **Sana** | **Apache-2.0** | [`LICENSE`](https://github.com/NVlabs/Sana/blob/main/LICENSE) | ✅ **Confirmed.** |
+| **SD 3.5 Medium** | Stability Community, revenue-limited | [HF API](https://huggingface.co/api/models/stabilityai/stable-diffusion-3.5-medium) | ⚠️ `license: other`, `gated: auto`. Commercial below **$1M annual revenue**. |
+
+**Demoted, not removed:** `Demucs` (MIT, but the author left Meta and states he is no longer actively working on it — it still ships releases, so it works; `demucs-rs` is the recommendation) and the face-swap category as a whole (good tools, but every one of them inherits InsightFace's non-commercial weights — now labelled as failing the commercial filter rather than quietly listed).
+
 ---
 
 ## Licenses — read from the source file
@@ -13,15 +41,26 @@ The rule we follow: a license claim is only stated if we read the license file o
 | Project | Claim | Source read | Verdict |
 |---|---|---|---|
 | **Wan2.2** | Apache-2.0, no rights claimed over output | [`LICENSE.txt`](https://github.com/Wan-Video/Wan2.2/blob/main/LICENSE.txt) | ✅ **Confirmed.** Repo README states *"We claim no rights over your the generated contents."* |
-| **Qwen-Image** | Apache-2.0 | [`LICENSE`](https://github.com/QwenLM/Qwen-Image/blob/main/LICENSE) | ✅ **Confirmed.** Standard Apache 2.0 text, no addendum. |
-| **HunyuanVideo-1.5** | Tencent Hunyuan Community, territory-limited | [`LICENSE`](https://github.com/Tencent-Hunyuan/HunyuanVideo-1.5/blob/main/LICENSE) | ✅ **Confirmed.** Excludes EU, UK, South Korea. Requires a Notice file with redistribution. Encourages "Powered by Tencent Hunyuan" labelling. Prohibits trademark use. |
-| **HunyuanImage-3.0** | Same family | [`LICENSE`](https://github.com/Tencent-Hunyuan/HunyuanImage-3.0/blob/main/LICENSE) | ✅ **Confirmed.** Same terms. |
-| **FLUX.2-dev** | FLUX Non-Commercial License **v2.1** | [`LICENSE.md`](https://huggingface.co/black-forest-labs/FLUX.2-dev/blob/main/LICENSE.md) | ✅ **Confirmed non-commercial.** Grants use "for your non-commercial and non-production use". Revenue-generating activity is explicitly excluded. |
-| **LTX-2** | LTX-2 Open Weights License 0.X | [`LICENSE`](https://huggingface.co/Lightricks/LTX-2/blob/main/LICENSE) | ✅ **Confirmed restricted.** Dated 5 Jan 2026. "Entities" must obtain a **paid** commercial license. Note this is a 19B model. |
-| **F5-TTS** | Code MIT, **weights CC-BY-NC-4.0** | [`cstr/f5-tts-GGUF` README](https://huggingface.co/cstr/f5-tts-GGUF/blob/main/README.md) | ✅ **Confirmed.** The converter self-corrected from a wrong `mit` declaration to `cc-by-nc-4.0` to match upstream. |
+| **Real-ESRGAN** | BSD-3-Clause | [`LICENSE`](https://github.com/xinntao/Real-ESRGAN/blob/master/LICENSE) | ✅ **Confirmed.** "BSD 3-Clause License, Copyright (c) 2021, Xintao Wang." |
 | **GFPGAN** | Apache-2.0 | [repo](https://github.com/TencentARC/GFPGAN) | ✅ **Confirmed.** README states Apache License 2.0. |
-| **CodeFormer** | NTU S-Lab License 1.0 | [repo](https://github.com/sczhou/CodeFormer) | ✅ **Confirmed.** Not Apache. Check before commercial use. |
-| **InsightFace** | Code MIT, **models non-commercial** | [insightface.ai](https://www.insightface.ai/) | ✅ **Confirmed split.** Vendor states the open InSwapper-128 is the open-source standard and offers **separate commercial licensing**. Applies to every downstream tool. |
+| **LatentSync** | Apache-2.0 | [`LICENSE`](https://github.com/bytedance/LatentSync/blob/main/LICENSE) | ✅ **Confirmed.** Standard Apache 2.0, no addendum. Cleanest license in the lip-sync category. |
+| **MuseTalk** | MIT code, **weights free for any purpose** | [`LICENSE`](https://github.com/TMElyralab/MuseTalk/blob/main/LICENSE) + README Disclaimer | ✅ **Confirmed.** LICENSE is MIT (Tencent Music Entertainment Group). README states models are *"available for any purpose, even commercially"*, and that dependent models (whisper, ft-mse-vae, dwpose, S3FD) carry their own terms. ⚠️ Bundled **test data** is non-commercial research only. |
+| **Demucs** | MIT | [`LICENSE`](https://github.com/adefossez/demucs/blob/main/LICENSE) | ✅ **License confirmed clean** (Meta Platforms). ⚠️ **Maintenance is not:** the author states he left Meta and is no longer actively working on it. PyPI shows 4.1.0 released 11 Jul 2026. |
+| **demucs-rs** | Apache-2.0 | [repo](https://github.com/nikhilunni/demucs-rs) | ✅ **Confirmed.** Independent Rust reimplementation of HTDemucs v4, Metal/Vulkan/WebGPU backends, VST3+CLAP. Created Feb 2026. |
+| **AudioCraft** | MIT | [`LICENSE`](https://github.com/facebookresearch/audiocraft/blob/main/LICENSE) | ✅ **Confirmed.** MIT, Meta Platforms. |
+
+### Removed — retained here so the removal is auditable
+
+| Project | Claim | Source read | Verdict |
+|---|---|---|---|
+| **HunyuanVideo-1.5** | Tencent Hunyuan Community, territory-limited | [`LICENSE`](https://github.com/Tencent-Hunyuan/HunyuanVideo-1.5/blob/main/LICENSE) | 🚫 **Confirmed, then removed.** Excludes EU, UK, South Korea. Requires a Notice file. Prohibits trademark use. |
+| **HunyuanImage-3.0** | Same family | [`LICENSE`](https://github.com/Tencent-Hunyuan/HunyuanImage-3.0/blob/main/LICENSE) | 🚫 **Same terms. Removed.** |
+| **FLUX.2-dev** | FLUX Non-Commercial **v2.1** | [`LICENSE.md`](https://huggingface.co/black-forest-labs/FLUX.2-dev/blob/main/LICENSE.md) | 🚫 **Confirmed non-commercial. Removed.** |
+| **LTX-2** | LTX-2 Open Weights License 0.X | [`LICENSE`](https://huggingface.co/Lightricks/LTX-2/blob/main/LICENSE) | 🚫 **Confirmed restricted. Removed.** Dated 5 Jan 2026. 19B model. |
+| **F5-TTS** | Code MIT, **weights CC-BY-NC-4.0** | [`cstr/f5-tts-GGUF` README](https://huggingface.co/cstr/f5-tts-GGUF/blob/main/README.md) | 🚫 **Confirmed. Removed, replaced by Chatterbox.** |
+| **CodeFormer** | **S-Lab License 1.0 — non-commercial** | [`LICENSE`](https://github.com/sczhou/CodeFormer/blob/master/LICENSE) | 🚫 **Confirmed non-commercial. Removed.** The LICENSE reads *"Redistribution and use for non-commercial purpose in source and binary forms."* The repo's permissive appearance is misleading. |
+| **InsightFace** | Code MIT, **models non-commercial** | [insightface.ai](https://www.insightface.ai/) | 🚫 **Confirmed split. Removed**, and the whole face-swap category relabelled as non-commercial. |
+| **Cerebras** | No permanent free tier | [inference-docs.cerebras.ai/support/rate-limits](https://inference-docs.cerebras.ai/support/rate-limits) | 🚫 **"No. The Free Trial is time- and credit-bounded: $5 in credits that expire 30 days after they're granted."** Removed from the tier table; kept as a debunk. |
 
 ## Hardware requirements
 

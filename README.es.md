@@ -18,7 +18,29 @@ Que una herramienta sea gratis no es lo mismo que sea *usable*. Antes de perder 
 | **¿Seguirá existiendo en seis meses?** | Los pesos abiertos no se revocan. Los tiers gratuitos alojados sí, con calendario. |
 | **¿Qué cuesta realmente "gratis"?** | Algunos tiers gratuitos entrenan con tus prompts. Estás pagando con datos. |
 
-**La licencia del código y la de los pesos son cosas distintas.** `F5-TTS` es código MIT con pesos CC-BY-NC. `InsightFace` es código MIT con modelos no comerciales. Este split es la norma, no la excepción — revisa las dos.
+**La licencia del código y la de los pesos son cosas distintas.** Este split es la norma, no la excepción — revisa las dos.
+
+### El filtro de usabilidad aplicado a esta lista
+
+Ser gratis no es lo mismo que ser usable. Una herramienta entra a esta lista solo si supera **las cuatro**:
+
+1. **Puedes correrla de verdad** — en una GPU de consumo o en un notebook. No un requisito de datacenter de 80GB.
+2. **Puedes usar el resultado comercialmente** — sin cláusula NC, sin "las entidades deben comprar".
+3. **No está bloqueada por región** — una licencia que excluye la UE, Reino Unido o Corea del Sur no es una herramienta gratis.
+4. **La licencia está confirmada en los pesos**, no solo en el código.
+
+**Removidas porque no pasaron el filtro** — listadas para que las reconozcas cuando un tutorial te las recomiende:
+
+| Removida | Por qué |
+|---|---|
+| `FLUX.2-dev` | Licencia no comercial. No se puede entregar trabajo de cliente. |
+| `LTX-2` | Cualquier "Entity" debe comprar licencia aparte. |
+| `Wan2.2` 14B (`T2V/I2V/S2V/Animate`) | Requiere **80GB de VRAM**; el checkpoint `I2V` fp8 además crashea en Metal. |
+| `HunyuanVideo-1.5`, `HunyuanImage-3.0` | La licencia de Tencent **no aplica en la UE, Reino Unido ni Corea del Sur.** |
+| `InsightFace` / `inswapper` | Código MIT, pero los **modelos son no comerciales** — y además es un backbone, no una herramienta. |
+| `F5-TTS` | Código MIT, **pesos CC-BY-NC.** Reemplazada aquí por Chatterbox (MIT). |
+| `Cerebras free tier` | No hay tier gratuito permanente. Un "$5 de crédito" que expira en 30 días no es gratis. |
+| `CogVideoX` | El LICENSE del repo dice Apache-2.0, pero los **pesos en Hugging Face dicen `other`.** Cuando discrepan, ganan los pesos. |
 
 ---
 
@@ -28,19 +50,21 @@ Porque si no haces cosas, nada de esto importa.
 
 ## 🎬 Video (pesos abiertos)
 
+Solo un modelo pasa el filtro en esta categoría, y alcanza.
+
 | Modelo | Licencia | Comercial | Realidad |
 |---|---|---|---|
-| **[Wan2.2](https://github.com/Wan-Video/Wan2.2)** (Alibaba) | **Apache-2.0** | ✅ **Sí, limpia** | El default seguro. El repo dice: *"We claim no rights over your generated contents."* 17.1k estrellas. |
-| **[Qwen-Image](https://github.com/QwenLM/Qwen-Image)** (Alibaba) | **Apache-2.0** | ✅ Sí | Modelo de imagen, pero bien licenciado — raro en esta familia. |
-| **[HunyuanVideo-1.5](https://github.com/Tencent-Hunyuan/HunyuanVideo-1.5)** (Tencent) | Tencent Hunyuan Community | ⚠️ **Con condiciones** | Limitado por territorio: **la licencia no aplica en la UE, Reino Unido ni Corea del Sur.** Hay que incluir un archivo Notice. Se recomienda (no se exige) etiquetar la salida "Powered by Tencent Hunyuan". Prohibido usar la marca. |
-| **[FLUX.2-dev](https://github.com/black-forest-labs/flux2)** (Black Forest Labs) | FLUX Non-Commercial **v2.1** | ❌ **No** | *"non-commercial and non-production use."* El modelo de imagen abierto más popular **no se puede usar legalmente para trabajo de cliente.** |
-| **[LTX-2](https://huggingface.co/Lightricks/LTX-2)** (Lightricks) | LTX-2 Open Weights License 0.X | ❌ **Las entidades deben comprar** | No es open source. Cualquier "Entity" necesita licencia comercial **pagada** aparte de Lightricks. |
+| **[Wan2.2 `TI2V-5B`](https://github.com/Wan-Video/Wan2.2)** (Alibaba) | **Apache-2.0** | ✅ **Sí, limpia** | El default seguro, y la razón de que no haya nada más en la lista. El repo dice: *"We claim no rights over your generated contents."* 17.1k estrellas. |
+| **[RIFE](https://github.com/nihui/rife-ncnn-vulkan)** | MIT | ✅ Sí | Interpolación de frames. La mejora de calidad más barata en video: interpola a 2x en vez de renderizar más frames. |
+| **[FILM](https://github.com/google-research/frame-interpolation)** | Apache-2.0 | ✅ Sí | La interpolación de Google, para cuando RIFE difumina el detalle fino. |
 
-### La trampa de Wan2.2: los modelos 14B no son para ti
+> ⚠️ **Todo lo demás en video abierto es una trampa.** Los 14B de Wan necesitan **80GB de VRAM**; `LTX-2` exige pagar a Lightricks; `HunyuanVideo-1.5` no vale en la UE, Reino Unido ni Corea del Sur. `TI2V-5B` es el que corre.
 
-El README oficial dice que `T2V-A14B`, `I2V-A14B`, `S2V-14B` y `Animate-14B` requieren **al menos 80GB de VRAM** para inferencia en una sola GPU.
+### Por qué `TI2V-5B` y no el 14B
 
-El que sí corre en hardware de consumo es **`TI2V-5B`**:
+El README oficial dice que `T2V-A14B`, `I2V-A14B`, `S2V-14B` y `Animate-14B` requieren **al menos 80GB de VRAM** para inferencia en una sola GPU. Eso es una A100 rentada, no un computador.
+
+El que corre en hardware de consumo:
 
 - Backbone en disco: **3.43 GB** (Q4 GGUF) / 5.4 GB (Q8) / 10 GB (fp16)
 - VRAM pico a 720p, 121 frames: **~8 GB**
@@ -51,24 +75,26 @@ El que sí corre en hardware de consumo es **`TI2V-5B`**:
 
 > **Ojo además:** Wan 2.2 es el último Wan *totalmente abierto*. Las versiones 2.5–3.0 son productos de API. Si un tutorial te manda a "Wan 2.5", te está pidiendo que pagues.
 
-**Interpolación de frames** — suaviza clips generados de forma barata: [RIFE](https://github.com/nihui/rife-ncnn-vulkan) (tiempo real, ~1.1k estrellas) o [FILM](https://github.com/google-research/frame-interpolation). Es la mejora de calidad más barata en generación de video: interpola en vez de renderizar más frames.
-
 ## 🖼️ Imagen
 
-| Proyecto | Qué es |
-|---|---|
-| **[ComfyUI](https://github.com/comfyanonymous/ComfyUI)** | La UI de pipelines en nodos a la que todo se enchufa. Si aprendes una herramienta, que sea esta. |
-| **[FLUX.2](https://github.com/black-forest-labs/flux2)** | El mejor modelo abierto en calidad — pero lee primero la licencia no comercial. |
-| **[Qwen-Image](https://github.com/QwenLM/Qwen-Image)** | Apache-2.0, y bueno renderizando texto en imágenes. |
-| **[Sana / Sana 1.5](https://github.com/NVlabs/Sana)** (NVIDIA) | Familia eficiente de alta resolución. |
-| **[HunyuanImage-3.0](https://github.com/Tencent-Hunyuan/HunyuanImage-3.0)** | Licencia community de Tencent — mismos límites territoriales que el modelo de video. |
-| **[Draw Things](https://docs.drawthings.ai/) / [DiffusionBee](https://github.com/divamgupta/diffusionbee-stable-diffusion-ui)** | Apps nativas de Mac. Sin Python, sin grafos de nodos. DiffusionBee es la abierta (13.6k estrellas). |
+| Proyecto | Licencia | Realidad |
+|---|---|---|
+| **[Qwen-Image](https://huggingface.co/Qwen/Qwen-Image)** (Alibaba) | **Apache-2.0**, **sin gate** | ✅ **El mejor punto de partida.** Sin aprobación de cuenta, sin click-through, y es inusualmente bueno renderizando texto dentro de imágenes. |
+| **[FLUX.1-schnell](https://huggingface.co/black-forest-labs/FLUX.1-schnell)** (Black Forest Labs) | **Apache-2.0** | ✅ El FLUX comercialmente limpio. ⚠️ **Gated en Hugging Face** — necesitas una cuenta HF gratis y aceptar los términos una vez. Es fricción leve, no un bloqueo. 4 pasos hasta una imagen. |
+| **[Sana](https://github.com/NVlabs/Sana)** (NVIDIA) | **Apache-2.0** | ✅ Familia eficiente de alta resolución. |
+| **[SD 3.5 Medium](https://huggingface.co/stabilityai/stable-diffusion-3.5-medium)** | Stability Community | ⚠️ Usable comercialmente bajo **$1M de ingresos anuales**, gated. Bien para casi todos, no para una agencia. |
+| **[DiffusionBee](https://github.com/divamgupta/diffusionbee-stable-diffusion-ui)** | Abierta | ✅ App nativa de Mac. Sin Python, sin grafos de nodos. 13.6k estrellas. |
+| **[Draw Things](https://docs.drawthings.ai/)** | Gratis, cerrada | App nativa de Mac con un backend Metal realmente bueno. |
 
-Otras UIs: [AUTOMATIC1111](https://github.com/AUTOMATIC1111/stable-diffusion-webui) (la instalación de referencia), [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) (fork más rápido), [InvokeAI](https://github.com/invoke-ai/InvokeAI), [SwarmUI](https://github.com/mcmonkeyprojects/SwarmUI).
+Otras UIs, todas MIT y todas funcionando: [ComfyUI](https://github.com/comfyanonymous/ComfyUI) (la UI de pipelines en nodos a la que todo se enchufa — si aprendes una herramienta, que sea esta), [AUTOMATIC1111](https://github.com/AUTOMATIC1111/stable-diffusion-webui) (la instalación de referencia), [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) (fork más rápido), [InvokeAI](https://github.com/invoke-ai/InvokeAI), [SwarmUI](https://github.com/mcmonkeyprojects/SwarmUI).
 
 > ⚠️ **Forge y Fooocus se quedan atrás.** Los dos siguen a Stable Diffusion upstream, que Stability ha ralentizado mucho. Revisa el último commit antes de construir un pipeline sobre cualquiera.
 
 ## 🎭 Face swap e identidad
+
+> 🚫 **Toda esta categoría falla el filtro comercial, y no vamos a fingir lo contrario.** Cada herramienta abierta de face swap — FaceFusion, DeepFaceLab, ReActor, Roop — está construida sobre **InsightFace `inswapper`**, cuyos modelos son **no comerciales**. Que el código sea MIT no cambia nada. Las herramientas son buenas de verdad y sirven perfecto para uso personal y de investigación; **no** son gratis para trabajo de cliente.
+>
+> Si un swap debe tener licencia comercial, el camino es [la licencia comercial de InsightFace](https://www.insightface.ai/), no un rodeo.
 
 Este es un pipeline de cuatro etapas. Conocerlas explica todo resultado raro.
 
@@ -77,45 +103,75 @@ Este es un pipeline de cuatro etapas. Conocerlas explica todo resultado raro.
 | 1. Detectar | Encuentra la cara, ubica landmarks | **InsightFace `buffalo_l`** (el estándar de facto) |
 | 2. Codificar | Comprime la cara en un vector de identidad | **Embeddings ArcFace** |
 | 3. Generar | Reconstruye la cara con la identidad fuente | **InSwapper** (GAN, rápido) o difusión (lento, mejor) |
-| 4. Mezclar + restaurar | Igualar color, difuminar bordes, recuperar textura | **CodeFormer** / **GFPGAN** |
+| 4. Mezclar + restaurar | Igualar color, difuminar bordes, recuperar textura | **GFPGAN** |
 
 > **La etapa 4 es lo que hace que los swaps de 2026 se vean bien.** Saltarse el pase de restauración es la razón más común de que un swap parezca una pegatina.
 
 | Proyecto | Licencia | Nota |
 |---|---|---|
-| **[FaceFusion](https://github.com/facefusion/facefusion)** | Código permisivo; hereda términos de los modelos | 29.5k estrellas, mantenido activamente. La mejor puerta de entrada. Corre 100% local. |
-| **[InsightFace](https://github.com/deepinsight/insightface)** | Código **MIT**, modelos **no comerciales** | El backbone de detección/embedding bajo casi todas las herramientas. ⚠️ La restricción están en los modelos, no en el código. |
-| **[DeepFaceLive](https://github.com/iperov/DeepFaceLive)** | Permisiva | Face swap en tiempo real desde webcam, para streaming. |
-| **[DeepFaceLab](https://github.com/iperov/DeepFaceLab)** | Permisiva | La vía de máxima calidad. Horas de entrenamiento, mejor fidelidad. Curva empinada. |
+| **[FaceFusion](https://github.com/facefusion/facefusion)** | Código permisivo; **hereda términos no comerciales de los modelos** | 29.5k estrellas, mantenido activamente, la mejor puerta de entrada. Corre 100% local. 🚫 No comercial vía `inswapper`. |
+| **[DeepFaceLive](https://github.com/iperov/DeepFaceLive)** | Código permisivo, modelos no comerciales | Face swap en tiempo real desde webcam, para streaming. Misma restricción. |
+| **[DeepFaceLab](https://github.com/iperov/DeepFaceLab)** | Código permisivo, modelos no comerciales | La vía de máxima calidad. Horas de entrenamiento, mejor fidelidad. Curva empinada. Misma restricción. |
 
 > **ReActor eliminado.** El repo original de este popular nodo de face swap para Stable Diffusion ya no es accesible y las copias que sobreviven son forks de pocas estrellas sin procedencia verificable. Preferimos dejar un hueco antes que linkear algo que no podemos respaldar.
 
 **Regla práctica:** GANs (InSwapper) para tiempo real y volumen; swappers de difusión para stills donde la calidad es crítica.
 
-> ⚠️ **El problema de herencia de licencias:** FaceFusion y las herramientas antiguas basadas en Roop dependen de los modelos `inswapper` de InsightFace. Esos modelos son no comerciales. Una herramienta permisiva que incluye pesos no comerciales **no** es gratis comercialmente. Si te está pagando un cliente, verifica antes de entregar.
+> ⚠️ **El problema de herencia de licencias, dicho una vez y claro:** una herramienta permisiva que incluye pesos no comerciales **no** es gratis comercialmente. Esta es la forma más común de romper sin darte cuenta un contrato con cliente usando IA "gratis".
 
 ## 🎙️ Voz, habla y audio
 
 | Proyecto | Licencia | Nota |
 |---|---|---|
-| **[F5-TTS](https://github.com/SWivid/F5-TTS)** | Código **MIT**, pesos **CC-BY-NC-4.0** | ⚠️ Pesos no comerciales. Clona una voz desde 5–15s de audio de referencia *más su transcripción*. ~1.5GB. Corre en CPU o con 4GB de VRAM. |
-| **[X-Voice](https://github.com/sunnyxrxrx/X-Voice)** | Revisa el model card | Clonaje cross-lingual zero-shot en **30 idiomas** desde un solo hablante. Liberado en abril 2026. |
-| **[Whisper](https://github.com/openai/whisper)** | MIT | Transcripción. El default para obtener la transcripción de referencia del F5-TTS. |
-| **[RVC](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)** | Revisa | Voice conversion — cambia el timbre de una voz por el de otra. |
+| **[Chatterbox](https://github.com/resemble-ai/chatterbox)** (Resemble AI) | **MIT** | ✅ **El modelo de voz que hay que usar.** Clonaje zero-shot desde un clip de referencia corto, con controles de CFG y exageración. `Chatterbox-Turbo` es de **350M** y está pensado explícitamente para poco VRAM; `Chatterbox-Multilingual V3` es 500M y cubre **23+ idiomas**. Incluye un `example_for_mac.py`. |
+| **[Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni)** (Alibaba) | **Apache-2.0** | ✅ Omni-modal end-to-end: texto, imagen, audio y video de entrada; **salida de voz en streaming en tiempo real**. 119 idiomas de texto, 19 de entrada de voz, 10 de salida. |
+| **[Whisper](https://github.com/openai/whisper)** | **MIT** | Transcripción. Te da la transcripción de referencia que el clonaje necesita. |
+| **[RVC](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)** | Revisa el model card | Voice **conversion** — cambia el timbre de una voz por el de otra, en vez de clonar desde cero. |
 
-> ⚠️ **Un bug de licencia documentado que conviene conocer:** la conversión [cstr/f5-tts-GGUF](https://huggingface.co/cstr/f5-tts-GGUF) declaraba `mit` y después se corrigió a `cc-by-nc-4.0` para coincidir con upstream. Si encontraste un GGUF de TTS que dice MIT, probablemente está mal.
+> ⚠️ **`F5-TTS` salió de esta lista** por una sola razón: código MIT pero **pesos CC-BY-NC**. Fue el TTS abierto más recomendado por dos años y no se puede usar legalmente para trabajo pagado. `Chatterbox` es MIT de punta a punta y es el reemplazo.
 
-**Ajustes de calidad de F5-TTS:** `speed = 0.78` para voz de locución natural, `nfe_step = 32` para mejor calidad. Una palabra mal en la transcripción de referencia degrada la salida de forma notable.
+> ⚠️ **Un bug de licencia documentado que conviene conocer:** la conversión [cstr/f5-tts-GGUF](https://huggingface.co/cstr/f5-tts-GGUF) declaraba `mit` y después se corrigió a `cc-by-nc-4.0` para coincidir con upstream. Si encontraste un GGUF de TTS que dice MIT, probablemente está mal. Por eso se revisa la licencia de los pesos y no la del repo.
+
+**Notas prácticas de Chatterbox:** clona solo desde audio que te pertenezca o que tengas permiso de usar. El V3 Multilingual mejora la preservación de acento y similitud de hablante entre idiomas, y eso importa más que la calidad de audio cruda si tu voz fuente tiene acento.
+
+## 🗣️ Lip sync y talking heads
+
+La forma más barata de tener diálogo en video con IA. Cambia la boca, conserva la actuación.
+
+| Proyecto | Licencia | Veredicto |
+|---|---|---|
+| **[LatentSync](https://github.com/bytedance/LatentSync)** (ByteDance) | **Apache-2.0** | ✅ **El que hay que usar.** Difusión latente end-to-end, sin representación de movimiento intermedia. 6k estrellas. Inferencia, checkpoints **y código de entrenamiento** abiertos. La versión 1.6 entrena a 512×512 específicamente para arreglar el blur de las versiones anteriores. Preservación de identidad fuerte. |
+| **[MuseTalk](https://github.com/TMElyralab/MuseTalk)** (Tencent Music) | **Código MIT, pesos libres para cualquier uso** | ✅ Raro — el README dice que los modelos entrenados están *"available for any purpose, even commercially."* Tiempo real a **30fps+ en una Tesla V100**. 6.5k estrellas. Los pesos solo modifican una región facial de 256×256. |
+| **[SadTalker](https://github.com/OpenTalker/SadTalker)** | Revisa el model card | Agrega movimiento de cabeza, no solo labios. 14.1k estrellas. ⚠️ La resolución de salida la limita su etapa de render 3DMM — no puede entregar 4K. |
+
+> ⚠️ **La advertencia de MuseTalk:** sus **datos de test** fueron recolectados de internet y están *"available for non-commercial research purposes only."* Eso aplica a los datos de test, **no** al modelo. No incluyas el set de test en un proyecto comercial.
+
+**Ajustes de LatentSync:** `inference_steps` 20–50 (más = mejor, más lento), `guidance_scale` 1.0–3.0 (más = sync más justo, puede verse artificial pasado 2.5).
+
+> **La trampa del orden de generación:** MuseV (o cualquier modelo image-to-video) genera la cara → **interpola** el framerate → *luego* corre el lip sync. Hacer lip sync antes de interpolar hace que la boca tartamudee.
+
+## 🎵 Separación y restauración de audio
+
+| Proyecto | Licencia | Veredicto |
+|---|---|---|
+| **[demucs-rs](https://github.com/nikhilunni/demucs-rs)** | **Apache-2.0** | ✅ **El que hay que usar.** Reimplementación en Rust de HTDemucs v4 con **aceleración Metal en macOS**, más un plugin VST3/CLAP para soltarlo en un DAW y escuchar los stems en vivo. Creado en 2026, en desarrollo activo. |
+| **[AudioCraft](https://github.com/facebookresearch/audiocraft)** (Meta) | **MIT** | ✅ Generación de música y sonido — MusicGen y compañía. |
+| **[Demucs](https://github.com/adefossez/demucs)** (Meta) | **MIT** | ⚠️ El original y sigue siendo la implementación de referencia, pero **el autor se fue de Meta** y dice que ya no trabaja activamente en esto. Sigue publicando releases (4.1.0, Jul 2026), así que funciona — nomás puede que no lo arreglen. Usa `demucs-rs`. |
+
+**Para qué sirve realmente separar en post:** sacar diálogo limpio de una grabación de locación con ruido, o despejar música debajo de un voiceover. Para producción musical también funciona igual de bien.
+
+> ⚠️ **La trampa del mantenimiento, dicha claro:** la herramienta de separación musical con más estrellas y más links está **efectivamente sin mantener por su autor**. Revisa la fecha del último release antes de construir un pipeline encima — este campo cambia más rápido que la imagen.
 
 ## 🔧 Restauración de caras y upscaling
 
 | Proyecto | Licencia | Nota |
 |---|---|---|
-| **[GFPGAN](https://github.com/TencentARC/GFPGAN)** | **Apache-2.0** | ✅ Licencia comercial limpia. Restauración ciega de caras. Usa los pesos de v1.4. |
-| **[CodeFormer](https://github.com/sczhou/CodeFormer)** | **NTU S-Lab License 1.0** | ⚠️ No es Apache. Mayor fidelidad con `w` bajo, pero lee la licencia. |
-| **[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** | BSD | Upscaling general. Se combina con ambos para el fondo. |
+| **[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** | **BSD-3** | ✅ Upscaling general. Se combina con el restaurador de caras para el fondo. |
+| **[GFPGAN](https://github.com/TencentARC/GFPGAN)** (Tencent) | **Apache-2.0** | ✅ Licencia comercial limpia. Restauración ciega de caras. Usa los pesos de v1.4. |
 
-**Ajusta el peso de fidelidad `w` de CodeFormer** (0→1): más bajo = se ve mejor pero puede alterar la identidad; más alto = preserva la identidad pero queda más suave. La mayoría de los face swaps "raros" tienen el `w` muy alto.
+> ⚠️ **`CodeFormer` removida.** Su licencia es **S-Lab License 1.0**, que concede uso *"for non-commercial purpose"* — pese a que el repo parezca permisivo. Fue la recomendación estándar por años y no se puede usar legalmente para trabajo pagado. `GFPGAN` es el reemplazo limpio.
+
+**Nota de ajuste:** si usas `GFPGAN` v1.4, el ajuste `upscale` es la palanca principal de calidad — empieza en 2 y súbelo solo si la salida se ve suave.
 
 ---
 
@@ -171,7 +227,7 @@ Claim que circula: *"Cerebras da 1,000,000 de tokens todos los días, para siemp
 > **Is there a permanently free tier?**
 > No. The Free Trial is time- and credit-bounded: **$5 in credits that expire 30 days after they're granted.**
 
-No hay tier gratuito permanente. Los $5 expiran a los 30 días. Este es el ejemplo más claro que hay en internet de un claim de tier gratis repetido hasta volverse falso.
+No hay tier gratuito permanente. Los $5 expiran a los 30 días. Este es el ejemplo más claro que hay en internet de un claim de tier gratis repetido hasta volverse falso. **Por eso Cerebras no aparece en la tabla de abajo.**
 
 ## Tiers verificados
 
@@ -179,7 +235,6 @@ No hay tier gratuito permanente. Los $5 expiran a los 30 días. Este es el ejemp
 |---|---|---|---|---|
 | **[Google AI Studio](https://ai.google.dev/pricing)** | Solo Flash / Flash-Lite. **Los Pro pasaron a pago el 1 Abr 2026.** | No | ✅ Sí | Publicado por el proveedor. ⚠️ **Los RPM/RPD reales están en tu consola, no en los docs.** |
 | **[Groq](https://console.groq.com/docs/rate-limits)** | Comúnmente ~30 RPM. Los topes diarios varían por modelo. | No | ✅ Sí | ⚠️ **Reportado por la comunidad.** Groq no publica topes diarios por modelo. |
-| **[Cerebras](https://inference-docs.cerebras.ai/support/rate-limits)** | **$5, expira a los 30 días. No es permanente.** | No | Solo trial | **Publicado por el proveedor.** |
 | **[OpenRouter](https://openrouter.ai/docs)** | 25+ modelos gratis sin créditos comprados | No | ✅ Sí | Publicado por el proveedor. |
 | **[Mistral](https://docs.mistral.ai/)** | Experiment tier, con rate limit | No | ⚠️ Revisa | **Límites exactos no publicados.** |
 
@@ -201,7 +256,7 @@ La mayoría de las APIs devuelven los números reales en los headers de respuest
 
 # 4. Stacks
 
-**Stack creativo $0** — ComfyUI + Wan2.2 `TI2V-5B` (Apache-2.0, ~8GB) + FaceFusion + F5-TTS para trabajo en borrador, más un fallback pagado para entregables de cliente, para no quedarte atrapado en un 429.
+**Stack creativo comercial $0** — ComfyUI + Wan2.2 `TI2V-5B` (Apache-2.0, ~8GB) + Qwen-Image (Apache-2.0) + MuseTalk (MIT) + Chatterbox (MIT) + GFPGAN (Apache-2.0), más un fallback pagado para entregables de cliente, para no quedarte atrapado en un 429. Cada componente es comercialmente limpio.
 
 **Stack de texto $0** — Ollama + Qwen3.5-9B (Apache-2.0, 262K) para todo lo privado. Tier gratis de Google AI Studio para el resto. Lee los headers de respuesta.
 
